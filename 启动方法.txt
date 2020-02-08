@@ -1,0 +1,2 @@
+powershell下运行ng serve(不是ng server, 差一个字母r）
+在terminal下运行npm run start:server或者node server.js

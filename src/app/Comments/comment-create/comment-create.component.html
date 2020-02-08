@@ -1,0 +1,30 @@
+<mat-card>
+    <form (submit)="onAddComment(commentForm)" #commentForm="ngForm">
+        <mat-form-field>
+            <input matInput type="text" name="courseCode" ngModel required minlength="3" #courseCode="ngModel"
+            placeholder="Course Code">
+            <mat-error *ngIf="courseCode.invalid">Please enter the course code of a comment. </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="text" name="courseName" ngModel
+            placeholder="Course Name">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="text" name="program" ngModel
+            placeholder="Program">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="text"  name="semester" ngModel
+            placeholder="Semester">
+        </mat-form-field>
+        <mat-form-field>
+            <textarea matInput cols="" rows="6" name="content" ngModel required minlength="3" #content="ngModel"
+            placeholder="Content"></textarea>
+            <mat-error *ngIf="content.invalid">Please enter the content code of a comment. </mat-error>
+        </mat-form-field>
+        <button 
+            mat-raised-button 
+            color="primary"
+            type="submit">Save Comment</button>
+    </form>
+</mat-card>
