@@ -1,27 +1,27 @@
 <mat-card>
     <mat-spinner *ngIf="isLoading"></mat-spinner>
-    <form (submit)="onSaveComment(commentForm)" #commentForm="ngForm" *ngIf="!isLoading">
+    <form [formGroup]="form" (submit)="onSaveComment()" *ngIf="!isLoading">
         <mat-form-field>
-            <input matInput type="text" name="courseCode" [ngModel]="comment?.courseCode" required minlength="3" #courseCode="ngModel"
+            <input matInput type="text" formControlName="courseCode"  required
             placeholder="Course Code">
-            <mat-error *ngIf="courseCode.invalid">Please enter the course code of a comment. </mat-error>
+            <mat-error *ngIf="form.get(courseCode)?.invalid">Please enter the course code of a comment. </mat-error>
         </mat-form-field>
         <mat-form-field>
-            <input matInput type="text" name="courseName" [ngModel]="comment?.courseName"
+            <input matInput type="text" formControlName="courseName"
             placeholder="Course Name">
         </mat-form-field>
         <mat-form-field>
-            <input matInput type="text" name="program" [ngModel]="comment?.program"
+            <input matInput type="text" formControlName="program"
             placeholder="Program">
         </mat-form-field>
         <mat-form-field>
-            <input matInput type="text"  name="semester" [ngModel]="comment?.semester"
+            <input matInput type="text"  formControlName="semester"
             placeholder="Semester">
         </mat-form-field>
         <mat-form-field>
-            <textarea matInput cols="" rows="6" name="content" [ngModel]="comment?.content" required minlength="3" #content="ngModel"
+            <textarea matInput cols="" rows="6" formControlName="content"  required
             placeholder="Content"></textarea>
-            <mat-error *ngIf="content.invalid">Please enter the content code of a comment. </mat-error>
+            <mat-error *ngIf="form.get(content)?.invalid">Please enter the content code of a comment. </mat-error>
         </mat-form-field>
         <button 
             mat-raised-button 

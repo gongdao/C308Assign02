@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import {HttpClientModule } from "@angular/common/http";
 import { MatInputModule, 
   MatCardModule,
@@ -28,7 +28,7 @@ import { CommentListComponent } from './Comments/comment-list/comment-list.compo
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     MatInputModule,
     MatCardModule,

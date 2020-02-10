@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const commentSchema = mongoose.Schema({
     courseCode: {type: String, required: true },
     courseName: { type: String},
-    Program: { type: String},
+    program: { type: String},
     semester: { type: String },
     content: { type: String, required: true }
 });

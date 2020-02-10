@@ -1,7 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 
 import { Comment } from '../comment.model';
-import { NgForm } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CommentsService } from '../comments.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
@@ -17,13 +17,21 @@ export class CommentCreateComponent implements OnInit {
   enteredSemester = '';
   enteredContent = '';
   isLoading = false;
+  comment: Comment;
+  form: FormGroup;
   private mode = 'create';
   private commentId: string;
-  comment: Comment;
 
   constructor(public commentsService: CommentsService, public route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.form = new FormGroup({
+      'courseCode': new FormControl('',{validators: [Validators.required, Validators.minLength(3)]}),
+      'courseName': new FormControl(''),
+      'program': new FormControl(''),
+      'semester': new FormControl(''),
+      'content': new FormControl('',{validators: [Validators.required, Validators.minLength(3)]})
+    });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       console.log(paramMap);
       if( paramMap.has('commentId')) {
@@ -40,7 +48,15 @@ export class CommentCreateComponent implements OnInit {
             program:commentData.program,
             semester:commentData.semester,
             content:commentData.content
-          }
+          };
+          console.log(this.comment);
+          this.form.setValue({
+            courseCode:this.comment.courseCode,
+            courseName:this.comment.courseName,
+            program:this.comment.program,
+            semester:this.comment.semester,
+            content:this.comment.content
+          });
         });
         console.log(this.commentId);
       } else {
@@ -51,28 +67,28 @@ export class CommentCreateComponent implements OnInit {
     });
   }
 
-  onSaveComment(form: NgForm){
-    if(form.invalid) {
+  onSaveComment(){
+    if(this.form.invalid) {
       return;
     }
     this.isLoading = true;
     if(this.mode === 'create') {
       this.commentsService.addComment(
-        form.value.courseCode, 
-        form.value.courseName,
-        form.value.program,
-        form.value.semester,
-        form.value.content );
+        this.form.value.courseCode, 
+        this.form.value.courseName,
+        this.form.value.program,
+        this.form.value.semester,
+        this.form.value.content );
       } else {
         this.commentsService.updateComment(
           this.commentId,
-          form.value.courseCode, 
-          form.value.courseName,
-          form.value.program,
-          form.value.semester,
-          form.value.content
+          this.form.value.courseCode, 
+          this.form.value.courseName,
+          this.form.value.program,
+          this.form.value.semester,
+          this.form.value.content
           );
       }
-      form.resetForm();
+      this.form.reset();
     }
 }
