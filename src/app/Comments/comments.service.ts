@@ -9,29 +9,40 @@ import { Router } from '@angular/router';
 @Injectable({providedIn: 'root'})
 export class CommentsService {
     comments: Comment[] = [];
-    private commentsUpdated = new Subject<Comment[]>();
+    private commentsUpdated = new Subject<{comments:Comment[], commentCount:number}>();
 
     constructor(private http: HttpClient, private router: Router){
 
     }
 
-    getComments(){
-        this.http.get<{ message: string, comments: any }>('http://localhost:4000/api/comments')
-        .pipe(map((commentData) => {
-            return commentData.comments.map(comment => {
-                return {
-                    courseCode: comment.courseCode,
-                    courseName: comment.courseName,
-                    program: comment.program,
-                    semester: comment.semester,
-                    content: comment.content,
-                    id: comment._id
+    getComments(commentsPerPage: number, currentPage: number){
+        const queryParams = `?pagesize=${commentsPerPage}&page=${currentPage}`;
+        this.http
+        .get<{ message: string; comments: any; maxComments:number }>(
+            'http://localhost:4000/api/comments' + queryParams
+        )
+        .pipe(
+            map((commentData) => {
+                return { 
+                    comments:commentData.comments.map(comment => {
+                        return {
+                            courseCode: comment.courseCode,
+                            courseName: comment.courseName,
+                            program: comment.program,
+                            semester: comment.semester,
+                            content: comment.content,
+                            id: comment._id
+                        };
+                    }),
+                    maxComments: commentData.maxComments
                 };
-            });
-        }))
-        .subscribe((transformedComments) => {
-            this.comments = transformedComments;
-            this.commentsUpdated.next([...this.comments]);
+            })
+        )
+        .subscribe(transformedCommentData => {
+            this.comments = transformedCommentData.comments;
+            this.commentsUpdated.next({ 
+                comments:[...this.comments], 
+                commentCount: transformedCommentData.maxComments});
         });
     }
 
@@ -49,11 +60,6 @@ export class CommentsService {
         const comment: Comment = { id: null, courseCode, courseName, program, semester, content };
         this.http.post<{message: string, commentId: string}>('http://localhost:4000/api/comments', comment)
         .subscribe((responseData) => {
-            console.log(responseData.message);
-            const id = responseData.commentId;
-            comment.id = id;
-            this.comments.push(comment);
-            this.commentsUpdated.next([...this.comments]);
             this.router.navigate(["/"]);
         });
     }
@@ -63,11 +69,6 @@ export class CommentsService {
             program:program,semester:semester,content:content};
         this.http.put('http://localhost:4000/api/comments/' + id, comment)
         .subscribe(response => {
-            const updatedComments = [...this.comments];
-            const oldCommentIndex = updatedComments.findIndex(c => c.id === comment.id);
-            updatedComments[oldCommentIndex] = comment;
-            this.comments = updatedComments;
-            this.commentsUpdated.next([...this.comments]);
             this.router.navigate(["/"]);
         });
     }
@@ -76,9 +77,6 @@ export class CommentsService {
         this.http.delete('http://localhost:4000/api/comments/' + commentId)
         .subscribe(() => {
             console.log('deleted!');
-            const updatedComments = this.comments.filter(comment => comment.id !== commentId);
-            this.comments = updatedComments;
-            this.commentsUpdated.next([...this.comments]);
         });
     }
 }

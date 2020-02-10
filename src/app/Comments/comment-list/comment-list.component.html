@@ -14,4 +14,6 @@
         </mat-action-row>
     </mat-expansion-panel>
 </mat-accordion>
+<mat-paginator [length]="totalComments" [pageSize]="commentsPerPage" [pageSizeOptions]="pageSizeOptions"
+        (page)="onChangedPage($event)"></mat-paginator> 
 <p class="mat-body" *ngIf="comments.length <= 0 && !isLoading">No comments added yet!</p>

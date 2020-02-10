@@ -7,7 +7,8 @@ import { MatInputModule,
   MatButtonModule, 
   MatToolbarModule,
   MatExpansionModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatPaginatorModule
  } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -37,6 +38,7 @@ import { CommentListComponent } from './Comments/comment-list/comment-list.compo
     MatExpansionModule,
     MatProgressSpinnerModule,
     MatProgressSpinnerModule,
+    MatPaginatorModule,
     HttpClientModule
   ],
   providers: [],

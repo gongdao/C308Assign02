@@ -37,6 +37,7 @@ router.put("/:id", (req, res, next) => {
 });
 
 router.get("", (req, res, next) => {
+    console.log(req.query);
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
     const commentQuery = Comment.find();
@@ -49,7 +50,7 @@ router.get("", (req, res, next) => {
     commentQuery.then(documents => {
         //console.log(documents);
         fetchedComments = documents;
-        return Comment.count();
+        return Comment.countDocuments();
     })
     .then(count => {
         res.status(200).json({
