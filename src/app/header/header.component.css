@@ -2,3 +2,26 @@
     display: block;
     margin-top: 1rem;
 }
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.mat-toolbar.mat-primary {
+    background: #007bff;
+    color: #fff;
+}
+.active{
+    background: #004bff;
+    color: #fff;
+}

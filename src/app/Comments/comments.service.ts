@@ -4,13 +4,14 @@ import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Comment} from './comment.model';
+import { Router } from '@angular/router';
 
 @Injectable({providedIn: 'root'})
 export class CommentsService {
     comments: Comment[] = [];
     private commentsUpdated = new Subject<Comment[]>();
 
-    constructor(private http: HttpClient){
+    constructor(private http: HttpClient, private router: Router){
 
     }
 
@@ -38,6 +39,12 @@ export class CommentsService {
         return this.commentsUpdated.asObservable();
     }
 
+    getComment(id: string) {
+        return this.http.get<{_id: string,courseCode:string,courseName:string,program:string,
+                        semester:string,content:string}>('http://localhost:4000/api/comments/' + id
+        );
+    }
+
     addComment(courseCode: string, courseName: string, program: string, semester: string, content: string){
         const comment: Comment = { id: null, courseCode, courseName, program, semester, content };
         this.http.post<{message: string, commentId: string}>('http://localhost:4000/api/comments', comment)
@@ -47,8 +54,24 @@ export class CommentsService {
             comment.id = id;
             this.comments.push(comment);
             this.commentsUpdated.next([...this.comments]);
+            this.router.navigate(["/"]);
         });
     }
+
+    updateComment(id: string, courseCode:string,courseName:string,program:string,semester:string,content:string){
+        const comment: Comment = {id:id,courseCode:courseCode,courseName:courseName,
+            program:program,semester:semester,content:content};
+        this.http.put('http://localhost:4000/api/comments/' + id, comment)
+        .subscribe(response => {
+            const updatedComments = [...this.comments];
+            const oldCommentIndex = updatedComments.findIndex(c => c.id === comment.id);
+            updatedComments[oldCommentIndex] = comment;
+            this.comments = updatedComments;
+            this.commentsUpdated.next([...this.comments]);
+            this.router.navigate(["/"]);
+        });
+    }
+
     deleteComment(commentId: string){
         this.http.delete('http://localhost:4000/api/comments/' + commentId)
         .subscribe(() => {

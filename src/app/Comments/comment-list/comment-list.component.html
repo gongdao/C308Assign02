@@ -1,4 +1,5 @@
-<mat-accordion multi="true" *ngIf="comments.length > 0">
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<mat-accordion multi="true" *ngIf="comments.length > 0 && !isLoading">
     <mat-expansion-panel *ngFor="let comment of comments">
         <mat-expansion-panel-header>
             {{comment.courseCode}}
@@ -8,9 +9,9 @@
         <p>{{comment.semester}}</p>
         <p>{{comment.content}}</p>
         <mat-action-row>
-            <button mat-button color="primary">EDIT</button>
+            <a mat-button color="primary" [routerLink]="['/edit', comment.id]">EDIT</a>
             <button mat-button color="warn" (click)="onDelete(comment.id)">DELETE</button>
         </mat-action-row>
     </mat-expansion-panel>
 </mat-accordion>
-<p class="mat-body" *ngIf="comments.length <= 0">No comments added yet!</p>
+<p class="mat-body" *ngIf="comments.length <= 0 && !isLoading">No comments added yet!</p>

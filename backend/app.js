@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 
+const commentsRoutes = require("./routes/commentsRt");
+
 const Comment = require('./models/comment');
 
 const app = express();
@@ -30,43 +32,67 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, PATCH, DELETE, OPTIONS"
+    "GET, POST, PATCH, PUT, DELETE, OPTIONS"
   );
   next();
 });
 
-app.post("/api/comments", (req, res, next) => {
-    const comment = new Comment({
-        courseCode: req.body.courseCode,
-        courseName: req.body.courseName,
-        program: req.body.program,
-        semester: req.body.semester,
-        content: req.body.content
-    });
-    comment.save().then(createdComment => {
-      console.log(createdComment);
-      res.status(201).json({
-          message: 'Comment added successfully!',
-          commentId: createdComment._id
-      });
-    });
-});
+// app.post("/api/comments", (req, res, next) => {
+//     const comment = new Comment({
+//         courseCode: req.body.courseCode,
+//         courseName: req.body.courseName,
+//         program: req.body.program,
+//         semester: req.body.semester,
+//         content: req.body.content
+//     });
+//     comment.save().then(createdComment => {
+//       console.log(createdComment);
+//       res.status(201).json({
+//           message: 'Comment added successfully!',
+//           commentId: createdComment._id
+//       });
+//     });
+// });
 
-app.get('/api/comments', (req, res, next) => {
-    Comment.find().then(documents => {
-        console.log(documents);
-        res.status(200).json({
-            message: 'Commets fetched successfully!',
-            comments: documents
-        });
-    });
-});
+// app.put("/api/comments/:id", (req, res, next) => {
+//   const comment = new Comment({
+//     _id: req.body.id,
+//     courseCode: req.body.courseCode,
+//     courseName: req.body.courseName,
+//     program: req.body.program,
+//     semester: req.body.semester,
+//     content: req.body.connect
+//   });
+//   Comment.updateOne({_id: req.params.id}, comment).then(result => {
+//     console.log(result);
+//     res.status(200).json({message: "update successfully."});
+//   })
+// })
 
-app.delete("/api/comments/:id", (req, res, next) => {
-  Comment.deleteOne({ _id: req.params.id }).then(result => {
-    console.log(result);
-    res.status(200).json({ message: "Comment deleted!"});
-  });
-});
+// app.get('/api/comments', (req, res, next) => {
+//     Comment.find().then(documents => {
+//         console.log(documents);
+//         res.status(200).json({
+//             message: 'Commets fetched successfully!',
+//             comments: documents
+//         });
+//     });
+// });
+// app.get("/api/comments/:id", (req, res, next) => {
+//   Comment.findById(req.params.id).then(comment => {
+//     if(comment) {
+//       res.status(200).json(comment);
+//     }else{
+//       res.status(404).json({message: 'Comment not found!'});
+//     }
+//   });
+// });
 
+// app.delete("/api/comments/:id", (req, res, next) => {
+//   Comment.deleteOne({ _id: req.params.id }).then(result => {
+//     console.log(result);
+//     res.status(200).json({ message: "Comment deleted!"});
+//   });
+// });
+app.use("/api/comments", commentsRoutes);
 module.exports = app;

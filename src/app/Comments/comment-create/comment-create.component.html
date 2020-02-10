@@ -1,24 +1,25 @@
 <mat-card>
-    <form (submit)="onAddComment(commentForm)" #commentForm="ngForm">
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <form (submit)="onSaveComment(commentForm)" #commentForm="ngForm" *ngIf="!isLoading">
         <mat-form-field>
-            <input matInput type="text" name="courseCode" ngModel required minlength="3" #courseCode="ngModel"
+            <input matInput type="text" name="courseCode" [ngModel]="comment?.courseCode" required minlength="3" #courseCode="ngModel"
             placeholder="Course Code">
             <mat-error *ngIf="courseCode.invalid">Please enter the course code of a comment. </mat-error>
         </mat-form-field>
         <mat-form-field>
-            <input matInput type="text" name="courseName" ngModel
+            <input matInput type="text" name="courseName" [ngModel]="comment?.courseName"
             placeholder="Course Name">
         </mat-form-field>
         <mat-form-field>
-            <input matInput type="text" name="program" ngModel
+            <input matInput type="text" name="program" [ngModel]="comment?.program"
             placeholder="Program">
         </mat-form-field>
         <mat-form-field>
-            <input matInput type="text"  name="semester" ngModel
+            <input matInput type="text"  name="semester" [ngModel]="comment?.semester"
             placeholder="Semester">
         </mat-form-field>
         <mat-form-field>
-            <textarea matInput cols="" rows="6" name="content" ngModel required minlength="3" #content="ngModel"
+            <textarea matInput cols="" rows="6" name="content" [ngModel]="comment?.content" required minlength="3" #content="ngModel"
             placeholder="Content"></textarea>
             <mat-error *ngIf="content.invalid">Please enter the content code of a comment. </mat-error>
         </mat-form-field>

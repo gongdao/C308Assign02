@@ -12,6 +12,7 @@ import { CommentsService } from '../comments.service';
 export class CommentListComponent implements OnInit, OnDestroy {
   
   comments: Comment[] = [];
+  isLoading = false;
   private commentsSub: Subscription;
     // {title: 'First Post', content: 'This is the first comment\'s content'},
     // {title: 'Second Post', content: 'This is the second comment\'s content'},
@@ -24,9 +25,11 @@ export class CommentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isLoading = true;
     this. commentsService.getComments();
     this.commentsSub = this.commentsService.getCommentUpdateListener()
     .subscribe((comments:Comment[]) => {
+      this.isLoading = false;
       this.comments = comments;
     });
   }
